@@ -1,1 +1,1 @@
-# Integration-beyond-point-to-point-Implementing-integration-patterns-using-Azure
+# Integration beyond point to point; Implementing integration patterns using Azure
