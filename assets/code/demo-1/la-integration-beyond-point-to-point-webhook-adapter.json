@@ -1,0 +1,141 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Complete_the_message_in_a_queue": {
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['servicebus']['connectionId']"
+                        }
+                    },
+                    "method": "delete",
+                    "path": "/@{encodeURIComponent(encodeURIComponent('q-assets'))}/messages/complete",
+                    "queries": {
+                        "lockToken": "@triggerBody()?['LockToken']",
+                        "queueType": "Main",
+                        "sessionId": ""
+                    }
+                },
+                "runAfter": {
+                    "Scope": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "ApiConnection"
+            },
+            "Dead-letter_the_message_in_a_queue": {
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['servicebus']['connectionId']"
+                        }
+                    },
+                    "method": "post",
+                    "path": "/@{encodeURIComponent(encodeURIComponent('q-assets'))}/messages/deadletter",
+                    "queries": {
+                        "deadLetterErrorDescription": "",
+                        "deadLetterReason": "",
+                        "lockToken": "@triggerBody()?['LockToken']",
+                        "sessionId": ""
+                    }
+                },
+                "runAfter": {
+                    "Scope": [
+                        "Failed",
+                        "Skipped",
+                        "TimedOut"
+                    ]
+                },
+                "type": "ApiConnection"
+            },
+            "Scope": {
+                "actions": {
+                    "Call_API_Management": {
+                        "inputs": {
+                            "body": "@decodeBase64(triggerBody()?['ContentData'])",
+                            "headers": {
+                                "Content-Type": "@triggerBody()?['ContentType']",
+                                "Ocp-Apim-Subscription-Key": "@body('Get_secret')?['value']"
+                            },
+                            "method": "POST",
+                            "uri": "https://apim-integration-beyond-point-to-point.azure-api.net/webhook/resource"
+                        },
+                        "runAfter": {
+                            "Get_secret": [
+                                "Succeeded"
+                            ]
+                        },
+                        "type": "Http"
+                    },
+                    "Get_secret": {
+                        "inputs": {
+                            "host": {
+                                "connection": {
+                                    "name": "@parameters('$connections')['keyvault_1']['connectionId']"
+                                }
+                            },
+                            "method": "get",
+                            "path": "/secrets/@{encodeURIComponent('ApimSubscriptionKey')}/value"
+                        },
+                        "runAfter": {},
+                        "type": "ApiConnection"
+                    }
+                },
+                "runAfter": {},
+                "type": "Scope"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "When_a_message_is_received_in_a_queue_(peek-lock)": {
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['servicebus']['connectionId']"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/@{encodeURIComponent(encodeURIComponent('q-assets'))}/messages/head/peek",
+                    "queries": {
+                        "queueType": "Main",
+                        "sessionId": "None"
+                    }
+                },
+                "recurrence": {
+                    "frequency": "Minute",
+                    "interval": 30
+                },
+                "type": "ApiConnection"
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {
+            "value": {
+                "keyvault_1": {
+                    "connectionId": "/subscriptions/fdf3a3a3-c8f5-472f-8367-6a9a4a6c11a9/resourceGroups/rg-integration-beyond-point-to-point/providers/Microsoft.Web/connections/keyvault",
+                    "connectionName": "keyvault",
+                    "connectionProperties": {
+                        "authentication": {
+                            "type": "ManagedServiceIdentity"
+                        }
+                    },
+                    "id": "/subscriptions/fdf3a3a3-c8f5-472f-8367-6a9a4a6c11a9/providers/Microsoft.Web/locations/westeurope/managedApis/keyvault"
+                },
+                "servicebus": {
+                    "connectionId": "/subscriptions/fdf3a3a3-c8f5-472f-8367-6a9a4a6c11a9/resourceGroups/rg-integration-beyond-point-to-point/providers/Microsoft.Web/connections/servicebus",
+                    "connectionName": "servicebus",
+                    "id": "/subscriptions/fdf3a3a3-c8f5-472f-8367-6a9a4a6c11a9/providers/Microsoft.Web/locations/westeurope/managedApis/servicebus"
+                }
+            }
+        }
+    }
+}
