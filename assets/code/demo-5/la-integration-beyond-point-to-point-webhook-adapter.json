@@ -1,0 +1,354 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Complete_the_message_in_a_topic_subscription": {
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['servicebus']['connectionId']"
+                        }
+                    },
+                    "method": "delete",
+                    "path": "/@{encodeURIComponent(encodeURIComponent('t-assets'))}/subscriptions/@{encodeURIComponent('sub-available')}/messages/complete",
+                    "queries": {
+                        "lockToken": "@triggerBody()?['LockToken']",
+                        "sessionId": "",
+                        "subscriptionType": "Main"
+                    }
+                },
+                "runAfter": {
+                    "Scope": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "ApiConnection"
+            },
+            "Dead-letter_the_message_in_a_topic_subscription": {
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['servicebus']['connectionId']"
+                        }
+                    },
+                    "method": "post",
+                    "path": "/@{encodeURIComponent(encodeURIComponent('t-assets'))}/subscriptions/@{encodeURIComponent('sub-available')}/messages/deadletter",
+                    "queries": {
+                        "deadLetterErrorDescription": "",
+                        "deadLetterReason": "",
+                        "lockToken": "@triggerBody()?['LockToken']",
+                        "sessionId": ""
+                    }
+                },
+                "runAfter": {
+                    "Scope": [
+                        "Failed",
+                        "Skipped",
+                        "TimedOut"
+                    ]
+                },
+                "type": "ApiConnection"
+            },
+            "Scope": {
+                "actions": {
+                    "Get_secret": {
+                        "inputs": {
+                            "host": {
+                                "connection": {
+                                    "name": "@parameters('$connections')['keyvault_1']['connectionId']"
+                                }
+                            },
+                            "method": "get",
+                            "path": "/secrets/@{encodeURIComponent('ApimSubscriptionKey')}/value"
+                        },
+                        "runAfter": {
+                            "Parse_JSON": [
+                                "Succeeded"
+                            ]
+                        },
+                        "type": "ApiConnection"
+                    },
+                    "Parse_JSON": {
+                        "inputs": {
+                            "content": "@decodeBase64(triggerBody()?['ContentData'])",
+                            "schema": {
+                                "properties": {
+                                    "@@odata.etag": {
+                                        "type": "string"
+                                    },
+                                    "AssetType": {
+                                        "properties": {
+                                            "@@odata.type": {
+                                                "type": "string"
+                                            },
+                                            "Id": {
+                                                "type": "integer"
+                                            },
+                                            "Value": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "AssetType#Id": {
+                                        "type": "integer"
+                                    },
+                                    "Author": {
+                                        "properties": {
+                                            "@@odata.type": {
+                                                "type": "string"
+                                            },
+                                            "Claims": {
+                                                "type": "string"
+                                            },
+                                            "Department": {},
+                                            "DisplayName": {
+                                                "type": "string"
+                                            },
+                                            "Email": {
+                                                "type": "string"
+                                            },
+                                            "JobTitle": {},
+                                            "Picture": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "Author#Claims": {
+                                        "type": "string"
+                                    },
+                                    "Color": {
+                                        "properties": {
+                                            "@@odata.type": {
+                                                "type": "string"
+                                            },
+                                            "Id": {
+                                                "type": "integer"
+                                            },
+                                            "Value": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "Color#Id": {
+                                        "type": "integer"
+                                    },
+                                    "Created": {
+                                        "type": "string"
+                                    },
+                                    "Editor": {
+                                        "properties": {
+                                            "@@odata.type": {
+                                                "type": "string"
+                                            },
+                                            "Claims": {
+                                                "type": "string"
+                                            },
+                                            "Department": {},
+                                            "DisplayName": {
+                                                "type": "string"
+                                            },
+                                            "Email": {
+                                                "type": "string"
+                                            },
+                                            "JobTitle": {},
+                                            "Picture": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "Editor#Claims": {
+                                        "type": "string"
+                                    },
+                                    "ID": {
+                                        "type": "integer"
+                                    },
+                                    "ItemInternalId": {
+                                        "type": "string"
+                                    },
+                                    "Manufacturer": {
+                                        "properties": {
+                                            "@@odata.type": {
+                                                "type": "string"
+                                            },
+                                            "Id": {
+                                                "type": "integer"
+                                            },
+                                            "Value": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "Manufacturer#Id": {
+                                        "type": "integer"
+                                    },
+                                    "Model": {
+                                        "type": "string"
+                                    },
+                                    "Modified": {
+                                        "type": "string"
+                                    },
+                                    "PurchaseDate": {
+                                        "type": "string"
+                                    },
+                                    "SerialNumber": {
+                                        "type": "string"
+                                    },
+                                    "Status": {
+                                        "properties": {
+                                            "@@odata.type": {
+                                                "type": "string"
+                                            },
+                                            "Id": {
+                                                "type": "integer"
+                                            },
+                                            "Value": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "Status#Id": {
+                                        "type": "integer"
+                                    },
+                                    "Title": {
+                                        "type": "string"
+                                    },
+                                    "{FilenameWithExtension}": {
+                                        "type": "string"
+                                    },
+                                    "{FullPath}": {
+                                        "type": "string"
+                                    },
+                                    "{HasAttachments}": {
+                                        "type": "boolean"
+                                    },
+                                    "{Identifier}": {
+                                        "type": "string"
+                                    },
+                                    "{IsFolder}": {
+                                        "type": "boolean"
+                                    },
+                                    "{Link}": {
+                                        "type": "string"
+                                    },
+                                    "{Name}": {
+                                        "type": "string"
+                                    },
+                                    "{Path}": {
+                                        "type": "string"
+                                    },
+                                    "{Thumbnail}": {
+                                        "properties": {
+                                            "Large": {},
+                                            "Medium": {},
+                                            "Small": {}
+                                        },
+                                        "type": "object"
+                                    },
+                                    "{VersionNumber}": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "runAfter": {},
+                        "type": "ParseJson"
+                    },
+                    "Publish_Event": {
+                        "inputs": {
+                            "body": [
+                                {
+                                    "data": {
+                                        "Device": "@{body('Parse_JSON')?['Title']}",
+                                        "Model": "@{body('Parse_JSON')?['Model']}",
+                                        "Status": "@{body('Parse_JSON')?['Status']?['Value']}"
+                                    },
+                                    "eventType": "Assets.CreatedOrUpdated",
+                                    "id": "@{guid()}",
+                                    "subject": "/assets/@{body('Parse_JSON')?['Title']}"
+                                }
+                            ],
+                            "host": {
+                                "connection": {
+                                    "name": "@parameters('$connections')['azureeventgridpublish']['connectionId']"
+                                }
+                            },
+                            "method": "post",
+                            "path": "/eventGrid/api/events"
+                        },
+                        "runAfter": {
+                            "Get_secret": [
+                                "Succeeded"
+                            ]
+                        },
+                        "type": "ApiConnection"
+                    }
+                },
+                "runAfter": {},
+                "type": "Scope"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "When_a_message_is_received_in_a_topic_subscription_(peek-lock)": {
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['servicebus']['connectionId']"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/@{encodeURIComponent(encodeURIComponent('t-assets'))}/subscriptions/@{encodeURIComponent('sub-available')}/messages/head/peek",
+                    "queries": {
+                        "sessionId": "None",
+                        "subscriptionType": "Main"
+                    }
+                },
+                "recurrence": {
+                    "frequency": "Minute",
+                    "interval": 30
+                },
+                "type": "ApiConnection"
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {
+            "value": {
+                "azureeventgridpublish": {
+                    "connectionId": "/subscriptions/fdf3a3a3-c8f5-472f-8367-6a9a4a6c11a9/resourceGroups/rg-integration-beyond-point-to-point/providers/Microsoft.Web/connections/azureeventgridpublish",
+                    "connectionName": "azureeventgridpublish",
+                    "id": "/subscriptions/fdf3a3a3-c8f5-472f-8367-6a9a4a6c11a9/providers/Microsoft.Web/locations/westeurope/managedApis/azureeventgridpublish"
+                },
+                "keyvault_1": {
+                    "connectionId": "/subscriptions/fdf3a3a3-c8f5-472f-8367-6a9a4a6c11a9/resourceGroups/rg-integration-beyond-point-to-point/providers/Microsoft.Web/connections/keyvault",
+                    "connectionName": "keyvault",
+                    "connectionProperties": {
+                        "authentication": {
+                            "type": "ManagedServiceIdentity"
+                        }
+                    },
+                    "id": "/subscriptions/fdf3a3a3-c8f5-472f-8367-6a9a4a6c11a9/providers/Microsoft.Web/locations/westeurope/managedApis/keyvault"
+                },
+                "servicebus": {
+                    "connectionId": "/subscriptions/fdf3a3a3-c8f5-472f-8367-6a9a4a6c11a9/resourceGroups/rg-integration-beyond-point-to-point/providers/Microsoft.Web/connections/servicebus",
+                    "connectionName": "servicebus",
+                    "id": "/subscriptions/fdf3a3a3-c8f5-472f-8367-6a9a4a6c11a9/providers/Microsoft.Web/locations/westeurope/managedApis/servicebus"
+                }
+            }
+        }
+    }
+}
