@@ -1,0 +1,147 @@
+### OK
+POST http://localhost:7071/api/StatusValidator
+Content-Type: application/json
+
+{
+  "@odata.etag": "\"2\"",
+  "ItemInternalId": "1",
+  "ID": 1,
+  "Title": "LT5214",
+  "Status": {
+    "@odata.type": "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+    "Id": 0,
+    "Value": "Available"
+  },
+  "Status#Id": 0,
+  "Manufacturer": {
+    "@odata.type": "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+    "Id": 3,
+    "Value": "Microsoft"
+  },
+  "Manufacturer#Id": 3,
+  "Model": "Surface Laptop",
+  "AssetType": {
+    "@odata.type": "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+    "Id": 1,
+    "Value": "Laptop"
+  },
+  "AssetType#Id": 1,
+  "Color": {
+    "@odata.type": "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+    "Id": 0,
+    "Value": "Space gray"
+  },
+  "Color#Id": 0,
+  "SerialNumber": "D451554S554871",
+  "PurchaseDate": "2021-05-18",
+  "Modified": "2021-05-30T13:36:44Z",
+  "Created": "2021-05-30T13:25:52Z",
+  "Author": {
+    "@odata.type": "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedUser",
+    "Claims": "i:0#.f|membership|eldert@eldert.net",
+    "DisplayName": "Eldert Grootenboer",
+    "Email": "eldert@eldert.net",
+    "Picture": "https://eldertnet.sharepoint.com/sites/integrationbeyondpointtopoint/_layouts/15/UserPhoto.aspx?Size=L&AccountName=eldert@eldert.net",
+    "Department": null,
+    "JobTitle": null
+  },
+  "Author#Claims": "i:0#.f|membership|eldert@eldert.net",
+  "Editor": {
+    "@odata.type": "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedUser",
+    "Claims": "i:0#.f|membership|eldert@eldert.net",
+    "DisplayName": "Eldert Grootenboer",
+    "Email": "eldert@eldert.net",
+    "Picture": "https://eldertnet.sharepoint.com/sites/integrationbeyondpointtopoint/_layouts/15/UserPhoto.aspx?Size=L&AccountName=eldert@eldert.net",
+    "Department": null,
+    "JobTitle": null
+  },
+  "Editor#Claims": "i:0#.f|membership|eldert@eldert.net",
+  "{Identifier}": "Lists%252fAsset%2bmanager%252f1_.000",
+  "{IsFolder}": false,
+  "{Thumbnail}": {
+    "Large": null,
+    "Medium": null,
+    "Small": null
+  },
+  "{Link}": "https://eldertnet.sharepoint.com/sites/integrationbeyondpointtopoint/_layouts/15/listform.aspx?PageType=4&ListId=5eea4d9d%2D0ff1%2D4575%2D8224%2Ddc14f29607e7&ID=1&ContentTypeID=0x01005E81905A7B292741A860A1C91BFA5BA400EAFFD5B0EE9D2B4BAA0E284EEAF73CB9",
+  "{Name}": "LT5214",
+  "{FilenameWithExtension}": "LT5214",
+  "{Path}": "Lists/Asset manager/",
+  "{FullPath}": "Lists/Asset manager/1_.000",
+  "{HasAttachments}": false,
+  "{VersionNumber}": "2.0"
+}
+
+### NOK
+POST http://localhost:7071/api/StatusValidator
+Content-Type: application/json
+
+{
+  "@odata.etag": "\"2\"",
+  "ItemInternalId": "1",
+  "ID": 1,
+  "Title": "LT5214",
+  "Status": {
+    "@odata.type": "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+    "Id": 0,
+    "Value": "Retired"
+  },
+  "Status#Id": 0,
+  "Manufacturer": {
+    "@odata.type": "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+    "Id": 3,
+    "Value": "Microsoft"
+  },
+  "Manufacturer#Id": 3,
+  "Model": "Surface Laptop",
+  "AssetType": {
+    "@odata.type": "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+    "Id": 1,
+    "Value": "Laptop"
+  },
+  "AssetType#Id": 1,
+  "Color": {
+    "@odata.type": "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+    "Id": 0,
+    "Value": "Space gray"
+  },
+  "Color#Id": 0,
+  "SerialNumber": "D451554S554871",
+  "PurchaseDate": "2015-05-18",
+  "Modified": "2021-05-30T13:36:44Z",
+  "Created": "2021-05-30T13:25:52Z",
+  "Author": {
+    "@odata.type": "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedUser",
+    "Claims": "i:0#.f|membership|eldert@eldert.net",
+    "DisplayName": "Eldert Grootenboer",
+    "Email": "eldert@eldert.net",
+    "Picture": "https://eldertnet.sharepoint.com/sites/integrationbeyondpointtopoint/_layouts/15/UserPhoto.aspx?Size=L&AccountName=eldert@eldert.net",
+    "Department": null,
+    "JobTitle": null
+  },
+  "Author#Claims": "i:0#.f|membership|eldert@eldert.net",
+  "Editor": {
+    "@odata.type": "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedUser",
+    "Claims": "i:0#.f|membership|eldert@eldert.net",
+    "DisplayName": "Eldert Grootenboer",
+    "Email": "eldert@eldert.net",
+    "Picture": "https://eldertnet.sharepoint.com/sites/integrationbeyondpointtopoint/_layouts/15/UserPhoto.aspx?Size=L&AccountName=eldert@eldert.net",
+    "Department": null,
+    "JobTitle": null
+  },
+  "Editor#Claims": "i:0#.f|membership|eldert@eldert.net",
+  "{Identifier}": "Lists%252fAsset%2bmanager%252f1_.000",
+  "{IsFolder}": false,
+  "{Thumbnail}": {
+    "Large": null,
+    "Medium": null,
+    "Small": null
+  },
+  "{Link}": "https://eldertnet.sharepoint.com/sites/integrationbeyondpointtopoint/_layouts/15/listform.aspx?PageType=4&ListId=5eea4d9d%2D0ff1%2D4575%2D8224%2Ddc14f29607e7&ID=1&ContentTypeID=0x01005E81905A7B292741A860A1C91BFA5BA400EAFFD5B0EE9D2B4BAA0E284EEAF73CB9",
+  "{Name}": "LT5214",
+  "{FilenameWithExtension}": "LT5214",
+  "{Path}": "Lists/Asset manager/",
+  "{FullPath}": "Lists/Asset manager/1_.000",
+  "{HasAttachments}": false,
+  "{VersionNumber}": "2.0"
+}
