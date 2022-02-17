@@ -46,8 +46,8 @@
                     "path": "/datasets/@{encodeURIComponent(encodeURIComponent('https://eldertnet.sharepoint.com/sites/integrationbeyondpointtopoint'))}/tables/@{encodeURIComponent(encodeURIComponent('5eea4d9d-0ff1-4575-8224-dc14f29607e7'))}/onupdateditems"
                 },
                 "recurrence": {
-                    "frequency": "Minute",
-                    "interval": 30
+                    "frequency": "Second",
+                    "interval": 5
                 },
                 "splitOn": "@triggerBody()?['value']",
                 "type": "ApiConnection"

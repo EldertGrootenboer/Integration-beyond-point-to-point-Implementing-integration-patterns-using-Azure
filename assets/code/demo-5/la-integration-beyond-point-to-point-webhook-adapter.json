@@ -318,7 +318,7 @@
                     }
                 },
                 "recurrence": {
-                    "frequency": "Minute",
+                    "frequency": "Second",
                     "interval": 30
                 },
                 "type": "ApiConnection"
